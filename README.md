@@ -2,10 +2,10 @@
 
 ```javascript
 $(function() {
-	  $('#myElem').smartSticky({
-			show: {
-                position: {
-                    original: {
+    $('#myElem').smartSticky({
+	      show: {
+                    position: {
+                    	original: {
                         under: true,
                         above: false
                     },
@@ -33,8 +33,8 @@ $(function() {
                     width: false,
                     left: false
                 }
-			}
-	  });
+	   }
+      });
 });
 ```
 
