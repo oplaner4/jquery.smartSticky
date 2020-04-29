@@ -1,11 +1,11 @@
 # Jquery.smartSticky
-Free, easy to use, javascript library for toggling between relative and sticky position, whose support is, even in newer browsers, still limited.
+Free, easy to use, javascript library for toggling between relative and fixed position.
 
 ### Features
 Jquery.smartSticky has these features:
 * Customizable visibility
 * Toggling between top and bottom position
-* Visibility allowed inside of parent element or set container
+* Allowed only in parent element or set container
 
 ### Installation and dependencies
 SmartSticky is built on [jQuery](http://jquery.com/).

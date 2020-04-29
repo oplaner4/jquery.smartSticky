@@ -1,13 +1,13 @@
 /**
- * jquery.smartSticky.css 1.1.0
- * by Ondrej Planer
- * 
- * This library requires jQuery.js
- * See the documentation before using this library please
- * 
- *
- * Copyright 2020, Ondrej Planer
- */
+* jquery.smartSticky.js 1.1.0
+* by Ondrej Planer
+* 
+* This library requires jQuery.js
+* See the documentation before using this library please
+* jquery.smartSticky.js may be freely distributed under the MIT license.
+*
+* Copyright 2020, Ondrej Planer
+*/
 
 
 .sticky-smart.sticky-smart-active {

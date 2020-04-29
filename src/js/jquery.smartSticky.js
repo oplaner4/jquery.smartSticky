@@ -4,7 +4,7 @@
 * 
 * This library requires jQuery.js
 * See the documentation before using this library please
-* 
+* jquery.smartSticky.js may be freely distributed under the MIT license.
 *
 * Copyright 2020, Ondrej Planer
 */
