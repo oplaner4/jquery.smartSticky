@@ -1,9 +1,11 @@
 # Jquery.smartSticky
 Free, easy to use, javascript library for toggling between relative and sticky position, whose support is, even in newer browsers, still limited.
 
-### Supports
+### Features
 Jquery.smartSticky has these features:
-* Showing on scroll direction
+* Customizable visibility
+* Toggling between top and bottom position
+* Visibility allowed inside of parent element or set container
 
 ### Installation and dependencies
 SmartSticky is built on [jQuery](http://jquery.com/).
@@ -19,29 +21,25 @@ Include the following code in the `<head>` tag of your HTML:
 
 <!-- include jquery.smartSticky css/js-->
 <link rel="stylesheet" href="/dist/jquery.smartSticky.min.css">
-<script type="javascript/js" src="/dist/jquery.smartSticky.min.js"></script>
+<script type="text/javascript" src="/dist/jquery.smartSticky.min.js"></script>
 ```
 
 #### 2. Initialization
 
 ```javascript
 $(function() {
-    $('#myElem').smartSticky({
-	    show: {
-                position: {
-                    original: {
-                        under: true,
-                        above: false
-                    },
-                    sticky: 'top'
+    $('#myElem').smartSticky(
+			show: {
+                delay: 50,
+                original: {
+                   under: true,
+                   above: false
                 },
+                fixed: 'top',
                 scrolling: {
-                    sticky: {
-                        delay: 50
-                    },
                     up: false,
                     down: true
-                } 
+                }
             },
             container: false,
             css: {
@@ -51,14 +49,15 @@ $(function() {
                     invisible: 'sticky-smart-invisible',
                     active: 'sticky-smart-active',
                     bottom: 'sticky-smart-bottom',
-                    top: 'sticky-smart-top'
+                    top: 'sticky-smart-top',
+                    background: 'sticky-smart-background'
                 },
-                sticky: {
+                fixed: {
                     width: false,
                     left: false
                 }
-	    }
-      });
+            }
+        });
 });
 ```
 

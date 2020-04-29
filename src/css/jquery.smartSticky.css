@@ -1,5 +1,5 @@
 /**
- * jquery.smartSticky.css 1.0.1
+ * jquery.smartSticky.css 1.1.0
  * by Ondrej Planer
  * 
  * This library requires jQuery.js
@@ -11,7 +11,6 @@
 
 
 .sticky-smart.sticky-smart-active {
-    background-color: white;
     position: fixed;
     left: 0;
     right: 0;
@@ -36,4 +35,12 @@
     .sticky-smart.sticky-smart-active.sticky-smart-invisible {
         opacity: 0;
         visibility: hidden;
+    }
+
+    .sticky-smart.sticky-smart-active.sticky-smart-background {
+        background-color: white;
+    }
+
+    .sticky-smart-placeholder {
+        width: 100%;
     }
