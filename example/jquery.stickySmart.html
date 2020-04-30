@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
@@ -8,8 +8,8 @@
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 
-    <script src="../src/js/jquery.smartSticky.js"></script>
-    <link rel="stylesheet" href="../src/css/jquery.smartSticky.css">
+    <script src="../dist/js/jquery.smartSticky.min.js"></script>
+    <link rel="stylesheet" href="../dist/css/jquery.smartSticky.min.css">
 
     <title>Jquery.smartSticky example</title>
 </head>
@@ -227,7 +227,11 @@
 
 
 
-
+    <style>
+        .sticky-smart.sticky-smart-active {
+            background-color: #abc1ff;
+        }
+    </style>
     <script>
         $(function () {
             $('.sticky-smart-1').smartSticky({
@@ -245,15 +249,6 @@
                 },
                 container: false,
                 css: {
-                    classes: {
-                        root: 'sticky-smart',
-                        placeholder: 'sticky-smart-placeholder',
-                        invisible: 'sticky-smart-invisible',
-                        active: 'sticky-smart-active',
-                        bottom: 'sticky-smart-bottom',
-                        top: 'sticky-smart-top',
-                        background: 'sticky-smart-background'
-                    },
                     fixed: {
                         width: false,
                         left: false
@@ -282,7 +277,17 @@
 
             $('.sticky-smart-4').smartSticky({
                 container: function (manager) {
-                   return manager.elem.closest('.row');
+                   return manager.getElement().closest('.row');
+                },
+                css: {
+                    fixed: {
+                        left: function (manager) {
+                           return manager.getContainer().offset().left;
+                        },
+                        width: function (manager) {
+                            return manager.getContainer().outerWidth();
+                        }
+                    }
                 }
             });
 
@@ -323,10 +328,10 @@
                     fixed: 'bottom',
                     scrolling: function (manager, scrollingBottom) {
                         if (scrollingBottom) {
-                            manager.elem.css('color', 'red');
+                            manager.getElement().css('color', 'red');
                         }
                         else {
-                            manager.elem.css('color', 'green');
+                            manager.getElement().css('color', 'green');
                         }
 
                         return true;
@@ -336,6 +341,7 @@
                 $(this).css('color', 'black');
             });
 
+
             $('.sticky-smart-10').smartSticky({
                 show: {
                     fixed: function () {
@@ -344,8 +350,6 @@
                         }
                     }
                 }
-            }).on('smartSticky.deactivate', function () {
-                $(this).css('color', 'black');
             });
 
 
@@ -383,8 +387,7 @@
             });
 
 
-
-
+            
             $('.navbar.navbar-sticky-smart').smartSticky({
                 show: {
                     fixed: function () {
@@ -392,7 +395,7 @@
                             return 'bottom';
                         }
                     },
-                    scrolling: function (manager, scrollingBottom) {
+                    scrolling: function (_manager, scrollingBottom) {
                         if ($(window).width() < 768) {
                             return !scrollingBottom;
                         }
@@ -401,11 +404,6 @@
                     }
                 }
             });
-
-
-
-
-
         });
     </script>
 </body>

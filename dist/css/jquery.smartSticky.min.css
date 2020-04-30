@@ -1,5 +1,5 @@
 /**
-* jquery.smartSticky.js 1.1.0
+* jquery.smartSticky 1.2.0
 * by Ondrej Planer
 * 
 * This library requires jQuery.js
@@ -7,7 +7,9 @@
 * jquery.smartSticky.js may be freely distributed under the MIT license.
 *
 * Copyright 2020, Ondrej Planer
+ * 
+ * 
+ * PRESERVE THIS PLEASE
 */
-
 
 .sticky-smart.sticky-smart-active{position:fixed;left:0;right:0;z-index:1048;padding:.5rem 15px;-webkit-box-shadow:0 0 2rem rgba(0,0,0,.15);box-shadow:0 0 2rem rgba(0,0,0,.15);-webkit-transition:opacity .1s ease-in-out;-o-transition:opacity .1s ease-in-out;transition:opacity .1s ease-in-out;margin:0}.sticky-smart.sticky-smart-active.sticky-smart-top{top:0}.sticky-smart.sticky-smart-active.sticky-smart-bottom{bottom:0}.sticky-smart.sticky-smart-active.sticky-smart-invisible{opacity:0;visibility:hidden}.sticky-smart.sticky-smart-active.sticky-smart-background{background-color:#fff}.sticky-smart-placeholder{width:100%}
