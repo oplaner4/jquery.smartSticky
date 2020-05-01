@@ -1,5 +1,5 @@
 /**
-* jquery.smartSticky 1.3.0
+* jquery.smartSticky 1.3.1
 * by Ondrej Planer
 * 
 * This library requires jQuery.js
@@ -32,7 +32,7 @@
         var self = this;
         self.enabled = true;
 
-        self.setOptions(options).elementManagerInstance = new smartStickyElementManager(self, elem);
+        self.elementManagerInstance = new smartStickyElementManager(elem, options);
 
         $.fn.smartSticky.scrollingManager.onScrolling(function () {
             self.adjustToCurrentScrollTop();
@@ -46,26 +46,17 @@
         return this.elementManagerInstance;
     };
 
-    smartStickyManager.prototype.getOptions = function () {
-        return this.options;
-    };
-
-    smartStickyManager.prototype.setOptions = function (options) {
-        this.options = $.extend(true, {}, $.fn.smartSticky.defaults, options);
-        return this;
-    };
-
     smartStickyManager.prototype.canBeShownDueToScrolling = function () {
-        if (this.getOptions().show.scrolling instanceof Function) {
-            return this.getOptions().show.scrolling(this.getElementManager(), $.fn.smartSticky.scrollingManager.scrollingDown()) === true ? true : false;
+        if (this.getElementManager().getOptions().show.scrolling instanceof Function) {
+            return this.getElementManager().getOptions().show.scrolling(this.getElementManager(), $.fn.smartSticky.scrollingManager.scrollingDown()) === true ? true : false;
         }
 
         if ($.fn.smartSticky.scrollingManager.scrollingDown()) {
-            if (this.getOptions().show.scrolling.down) {
+            if (this.getElementManager().getOptions().show.scrolling.down) {
                 return true;
             }
         }
-        else if (this.getOptions().show.scrolling.up) {
+        else if (this.getElementManager().getOptions().show.scrolling.up) {
             return true;
         }
 
@@ -124,16 +115,30 @@
         return this;
     };
 
-    var smartStickyElementManager = function (smartStickyManagerInstance, elem) {
-        this.options = smartStickyManagerInstance.getOptions();
+    smartStickyManager.prototype.setOptions = function (options) {
+        this.getElementManager().setOptions(options);
+        return this;
+    };
 
+
+
+    var smartStickyElementManager = function (elem, options) {
         this.elem = elem.addClass($.fn.smartSticky.classes.root).wrap(
             $('<div />', { class: $.fn.smartSticky.classes.placeholder })
         );
-        this.container = null;
-        this.updateContainer();
+
+        this.setOptions(options).updateContainer();
 
         this.positions = ['top', 'bottom', 'toggle'];
+    };
+
+    smartStickyElementManager.prototype.setOptions = function (options) {
+        this.options = $.extend(true, {}, $.fn.smartSticky.defaults, options);
+        return this;
+    };
+
+    smartStickyElementManager.prototype.getOptions = function () {
+        return this.options;
     };
 
     smartStickyElementManager.prototype.getElement = function () {
@@ -186,7 +191,7 @@
     };
 
     smartStickyElementManager.prototype.updateContainer = function () {
-        var c = this.options.container;
+        var c = this.getOptions().container;
 
         if (c instanceof Function) {
             c = c(this);
@@ -215,7 +220,7 @@
     };
 
     smartStickyElementManager.prototype.getFixedLeft = function () {
-        var l = this.options.css.fixed.left;
+        var l = this.getOptions().css.fixed.left;
 
         if (l instanceof Function) {
             l = l(this, $.fn.smartSticky.scrollingManager.scrollingDown());
@@ -229,7 +234,7 @@
     };
 
     smartStickyElementManager.prototype.getFixedWidth = function () {
-        var w = this.options.css.fixed.width;
+        var w = this.getOptions().css.fixed.width;
 
         if (w instanceof Function) {
             w = w(this, $.fn.smartSticky.scrollingManager.scrollingDown());
@@ -243,11 +248,11 @@
     };
 
     smartStickyElementManager.prototype.outOfOrigPositionAbove = function () {
-        return this.getOrigOffsetTop() - this.options.show.delay - $.fn.smartSticky.scrollingManager.getWindow().height() > $.fn.smartSticky.scrollingManager.getCurrentScrollTop();
+        return this.getOrigOffsetTop() - this.getOptions().show.delay - $.fn.smartSticky.scrollingManager.getWindow().height() > $.fn.smartSticky.scrollingManager.getCurrentScrollTop();
     };
 
     smartStickyElementManager.prototype.outOfOrigPositionUnder = function () {
-        return this.getOrigOffsetTop() + this.getOrigHeight() + this.options.show.delay < $.fn.smartSticky.scrollingManager.getCurrentScrollTop();
+        return this.getOrigOffsetTop() + this.getOrigHeight() + this.getOptions().show.delay < $.fn.smartSticky.scrollingManager.getCurrentScrollTop();
     };
 
     smartStickyElementManager.prototype.outOfOrigPosition = function () {
@@ -268,7 +273,7 @@
     };
 
     smartStickyElementManager.prototype.getFixedPosition = function () {
-        var p = this.options.show.fixed;
+        var p = this.getOptions().show.fixed;
         if (p instanceof Function) {
             p = p(this, $.fn.smartSticky.scrollingManager.scrollingDown());
         }
@@ -290,13 +295,13 @@
     };
 
     smartStickyElementManager.prototype.canBeShownDueToOrigPosition = function () {
-        if (this.options.show.original.above) {
+        if (this.getOptions().show.original.above) {
             if (this.outOfOrigPositionAbove()) {
                 return true;
             }
         }
 
-        if (this.options.show.original.under) {
+        if (this.getOptions().show.original.under) {
             if (this.outOfOrigPositionUnder()) {
                 return true;
             }
