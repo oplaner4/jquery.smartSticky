@@ -19,8 +19,8 @@ Include the following code in the `<head>` tag of your HTML:
 <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 
 <!-- include jquery.smartSticky css/js-->
-<link rel="stylesheet" href="/dist/jquery.smartSticky.min.css">
-<script type="text/javascript" src="/dist/jquery.smartSticky.min.js"></script>
+<link rel="stylesheet" href="/dist/css/jquery.smartSticky.min.css">
+<script type="text/javascript" src="/dist/js/jquery.smartSticky.min.js"></script>
 ```
 
 #### 2. Usage
