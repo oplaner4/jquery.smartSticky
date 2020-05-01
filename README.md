@@ -1,8 +1,8 @@
 # Jquery.smartSticky
-Free, easy to use, javascript library for toggling between relative and fixed position, because support of sticky position is, even in newer browsers, still limited.
+Free, easy to use, javascript library for toggling between relative and fixed position, because of limited support of sticky position even in newer browsers.
 
 ### Features
-Jquery.smartSticky supports these features:
+Jquery.smartSticky supports:
 * Highly customizable visibility and placement of the element
 * Toggling between top and bottom position
 * Displaying of fixed element only inside of container area
@@ -31,10 +31,15 @@ $(element).smartSticky([options])
 
 - **options** (optional)
   - Type: `Object`
-
+  - Default options to be changed
+  
+  
 #### 3. Initialization
 
 Use the following code with default settings.
+
+`null` properties are computed automatically.
+
 ```javascript
 $(function() {
     $('#myElem').smartSticky({
@@ -50,11 +55,11 @@ $(function() {
                 down: true
             }
         },
-        container: false,
+        container: null,
         css: {
             fixed: {
-                width: false,
-                left: false
+                width: null,
+                left: null
             }
         }
     });
@@ -88,7 +93,7 @@ Determines if the element can be shown under its original position.
 
 Determines placement of the fixed element.
 
-Possible values: `'top'`, `'bottom'` and `'toggle'`
+Possible values are `'top'`, `'bottom'` and `'toggle'`
 
 If `'toggle'` is used and `show.scrolling` is not `Function`, option `show.scrolling.up` and `show.scrolling.down` must be set to `true` for properly behaviour.
 
@@ -97,7 +102,7 @@ If `'toggle'` is used and `show.scrolling` is not `Function`, option `show.scrol
 
 One of the accepted values of `show.fixed` option property.
 
-This function is called always on window scroll and window resize for each element..
+This callback is fired at initialization, when activated and on window scroll and resize separately for each fixed element.
 
 ```javascript
 show: {
@@ -115,7 +120,7 @@ show: {
 - Type: `Boolean`
 - Default: `false`
 
-Determines if the element is shown when scrolling up. 
+Determines if the fixed element can be shown while scrolling up. 
 
 If `show.fixed` is set to `'toggle'`, this option must be set to `true` for properly behaviour.
 
@@ -123,18 +128,18 @@ If `show.fixed` is set to `'toggle'`, this option must be set to `true` for prop
 - Type: `Boolean`
 - Default: `true`
 
-Determines if the element is shown when scrolling down. 
+Determines if the fixed element can be shown while scrolling down. 
 
 If `show.fixed` is set to `'toggle'`, this option must be set to `true` for properly behaviour.
 
 #### show.scrolling (elementManager, scrollingDown)
 - Returns: `Boolean`
 
-Determines visibility of the element when scrolling.
+Determines visibility of the fixed element while scrolling.
 
-Use `true` to show element and `false` to hide.
+Use `true` to show and `false` to hide.
 
-This function is called always on window scroll and window resize for each element.
+These callbacks are fired at initialization, when activated and on window scroll and resize separately for each fixed element.
 
 ```javascript
 show: {
@@ -152,16 +157,20 @@ show: {
 - Type: `HTMLelement`, `JQuery` or `String`
 - Default: `null`
 
-By default, the element's parent is used.
-
 The fixed element can be displayed only inside of container area.
+
+By default, the element's original parent is used.
 
 Use `String` to find element by selector.
 
-#### container (elementManager)
-- Returns: `HTMLelement` or `jQuery`
+If more elements are included in `JQuery` collection or if they are found by `String` selector, first element is used.
 
-This function is called always on window resize for each element.
+If no element is included in `JQuery` collection or found by `String` selector, default container is used.
+
+#### container (elementManager)
+- Returns: `HTMLelement`, `JQuery` or `String`
+
+This callback is fired at initialization, when deactivated and on window resize separately for each relative element.
 
 ```javascript
 container: function (elementManager) {
@@ -201,7 +210,7 @@ Sets css width property of the fixed element.
 
 Set css left and width property of the fixed element.
 
-These functions are called always on window resize for each element.
+These callbacks are fired at initialization, when activated and on window resize separately for each fixed element.
 
 ```javascript
 css: {
@@ -224,17 +233,75 @@ css: {
 }
 ```
 
+### Defaults
+If you want to change default settings, use the following code:
+```javascript
+$.extend( true, $.fn.smartSticky.defaults, {
+    show: {
+    	delay: 0
+    }
+} );
+```
+
 ### Methods
 
-Use only after initialization.
+Use only after **initialization**.
 
 ```javascript
-$('#myElem').smartSticky('methodName', argument1, argument2, ....);
+$('.myElems').smartSticky('methodName', argument1, argument2, ...);
 
+/* or */
 
+$('.myElems').each(function () {
+    $(this).smartSticky('instance').methodName(argument1, argument2, ...);
+});
 
 ```
 
+
+#### setOptions (options)
+Updates dynamically options.
+
+```javascript
+$('#myElem').smartSticky('setOptions', {
+    show: {
+    	scrolling: {
+	    up: true
+	}
+    }
+});
+```
+
+#### enable ()
+Enables component.
+
+#### disable ()
+Disables component.
+
+#### hide ()
+Hides fixed element.
+
+### Events
+
+Use the following code to set callback on event.
+
+```javascript
+$('#myElem').smartSticky().on('smartSticky.eventName', function (e, elementManager) {
+	
+});
+```
+
+#### activate
+Fires when element becames fixed.
+
+```javascript
+$('#myElem').smartSticky().on('smartSticky.activate', function (e, elementManager) {
+	$(this).css('border', '1px solid black');
+});
+```
+
+#### deactivate
+Fires when element becames relative.
 
 ### License
 jquery.smartSticky may be freely distributed under the MIT license.
