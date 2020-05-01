@@ -1,5 +1,5 @@
 /**
-* jquery.smartSticky 1.2.0
+* jquery.smartSticky 1.3.0
 * by Ondrej Planer
 * 
 * This library requires jQuery.js
@@ -12,6 +12,9 @@
  * PRESERVE THIS PLEASE
 */
 
+.sticky-smart, .sticky-smart-placeholder {
+    position: relative;
+}
 
 .sticky-smart.sticky-smart-active {
     position: fixed;
