@@ -95,7 +95,7 @@ Determines placement of the fixed element.
 
 Possible values are `'top'`, `'bottom'` and `'toggle'`.
 
-`'toggle'` places fixed element bottom while scrolling down and top while scrolling up. If used, options `show.scrolling.up` and `show.scrolling.down` must be set to `true`, eventually, callback `show.scrolling` must return `true` for properly behaviour.
+`'toggle'` places fixed element top while scrolling down and bottom while scrolling up. If used, options `show.scrolling.up` and `show.scrolling.down` must be set to `true`, eventually, callback `show.scrolling` must return `true` for properly behaviour.
 
 #### show.fixed (elementManager, scrollingDown)
 - Returns: `String`
@@ -139,7 +139,9 @@ Determines visibility of the fixed element while scrolling.
 
 Use `true` to show and `false` to hide.
 
-These callbacks are fired at initialization, when activated and on window scroll and resize separately for each fixed element.
+This callback is fired at initialization, when activated and on window scroll and resize separately for each fixed element.
+
+If `show.fixed` is set to `'toggle'`, this callback must return `true` for properly behaviour.
 
 ```javascript
 show: {
