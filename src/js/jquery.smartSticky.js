@@ -1,5 +1,5 @@
 /**
-* jquery.smartSticky 1.3.1
+* jquery.smartSticky 1.3.2
 * by Ondrej Planer
 * 
 * This library requires jQuery.js
@@ -128,8 +128,6 @@
         );
 
         this.setOptions(options).updateContainer();
-
-        this.positions = ['top', 'bottom', 'toggle'];
     };
 
     smartStickyElementManager.prototype.setOptions = function (options) {
@@ -278,7 +276,7 @@
             p = p(this, $.fn.smartSticky.scrollingManager.scrollingDown());
         }
 
-        if (this.positions.indexOf(p) > -1) {
+        if ($.fn.smartSticky.positions.indexOf(p) > -1) {
             if (p === 'toggle') {
                 if (!$.fn.smartSticky.scrollingManager.scrollingDown()) {
                     return 'bottom';
@@ -371,6 +369,8 @@
         top: 'sticky-smart-top',
         background: 'sticky-smart-background'
     };
+   
+    $.fn.smartSticky.positions = new Array('top', 'bottom', 'toggle');
 
 
     var scrollingManager = function () {
