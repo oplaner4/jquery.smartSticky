@@ -1,5 +1,5 @@
 /**
-* jquery.smartSticky 1.3.2
+* jquery.smartSticky 1.4.0
 * by Ondrej Planer
 * 
 * This library requires jQuery.js
@@ -258,7 +258,7 @@
     };
 
     smartStickyElementManager.prototype.outOfContainerAbove = function () {
-        return $.fn.smartSticky.scrollingManager.getCurrentScrollTop() + (this.toBePlacedBottom() ? this.getElement().outerHeight() : 0) < this.getContainer().offset().top;
+        return $.fn.smartSticky.scrollingManager.getCurrentScrollTop() + (this.toBePlacedBottom() ? $.fn.smartSticky.scrollingManager.getWindow().height() - this.getElement().outerHeight() : 0) < this.getContainer().offset().top;
     };
 
     smartStickyElementManager.prototype.outOfContainerUnder = function () {
