@@ -93,9 +93,9 @@ Determines if the element can be shown under its original position.
 
 Determines placement of the fixed element.
 
-Possible values are `'top'`, `'bottom'` and `'toggle'`
+Possible values are `'top'`, `'bottom'` and `'toggle'`.
 
-If `'toggle'` is used and `show.scrolling` is not `Function`, option `show.scrolling.up` and `show.scrolling.down` must be set to `true` for properly behaviour.
+`'toggle'` places fixed element bottom while scrolling down and top while scrolling up. If used, options `show.scrolling.up` and `show.scrolling.down` must be set to `true`, eventually, callback `show.scrolling` must return `true` for properly behaviour.
 
 #### show.fixed (elementManager, scrollingDown)
 - Returns: `String`
