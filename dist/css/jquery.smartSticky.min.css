@@ -1,6 +1,7 @@
 /**
-* jquery.smartSticky 1.4.0
-* by Ondrej Planer
+* jquery.smartSticky 2.0.0
+* https://github.com/oplaner4/jquery.smartSticky
+* by Ondrej Planer, oplaner4@gmail.com
 * 
 * This library requires jQuery.js
 * See the documentation before using this library please
@@ -12,4 +13,4 @@
  * PRESERVE THIS PLEASE
 */
 
-.sticky-smart,.sticky-smart-placeholder{position:relative}.sticky-smart.sticky-smart-active{position:fixed;left:0;right:0;z-index:1048;padding:.5rem 15px;-webkit-box-shadow:0 0 2rem rgba(0,0,0,.15);box-shadow:0 0 2rem rgba(0,0,0,.15);-webkit-transition:opacity .1s ease-in-out;-o-transition:opacity .1s ease-in-out;transition:opacity .1s ease-in-out;margin:0}.sticky-smart.sticky-smart-active.sticky-smart-top{top:0}.sticky-smart.sticky-smart-active.sticky-smart-bottom{bottom:0}.sticky-smart.sticky-smart-active.sticky-smart-invisible{opacity:0;visibility:hidden}.sticky-smart.sticky-smart-active.sticky-smart-background{background-color:#fff}.sticky-smart-placeholder{width:100%}
+.sticky-smart,.sticky-smart-container{position:relative}.sticky-smart.sticky-smart-active{position:fixed;z-index:1048;padding:.5rem 15px;-webkit-box-shadow:0 0 2rem rgba(0,0,0,.15);box-shadow:0 0 2rem rgba(0,0,0,.15);-webkit-transition:opacity .1s ease-in-out;-o-transition:opacity .1s ease-in-out;transition:opacity .1s ease-in-out;margin:0}.sticky-smart.sticky-smart-active.sticky-smart-invisible{opacity:0;visibility:hidden}.sticky-smart.sticky-smart-active.sticky-smart-background{background-color:#fff}.sticky-smart-placeholder{width:100%}

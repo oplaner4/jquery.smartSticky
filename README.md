@@ -1,12 +1,15 @@
 # Jquery.smartSticky
 Free, easy to use, javascript library for toggling between relative and fixed position, because of limited support of sticky position even in newer browsers.
 
+Current version: **2.0.0**
+
 ### Features
 Jquery.smartSticky supports:
 * Highly customizable visibility and placement of the element
 * Toggling between top and bottom position
 * Displaying of fixed element only inside of container area
-* Implementation of own callbacks
+* Implementation of own callbacks and positions
+* Inner overflowing containers
 
 ### Installation and dependencies
 SmartSticky is built on and works properly with [jQuery](http://jquery.com/).
@@ -31,19 +34,19 @@ $(element).smartSticky([options])
 
 - **options** (optional)
   - Type: `Object`
-  - Default options to be changed
+  - Default options to be changed, see the list of available options below.
   
   
 #### 3. Initialization
 
-Use the following code with default settings.
+You can use the following code with default settings.
 
-`null` properties are computed automatically.
+`null` properties are computed automatically by library.
 
 ```javascript
 $(function() {
     $('#myElem').smartSticky({
-	show: {
+        show: {
             delay: 50,
             original: {
                 under: true,
@@ -93,11 +96,36 @@ Determines if the element can be shown under its original position.
 
 Determines placement of the fixed element.
 
-Possible values are `'top'`, `'bottom'` and `'toggle'`.
+Possible predefined values are `'top'`, `'bottom'` and `'toggle'`.
 
 `'toggle'` places fixed element top while scrolling down and bottom while scrolling up. If used, options `show.scrolling.up` and `show.scrolling.down` must be set to `true`, eventually, callback `show.scrolling` must return `true` for properly behaviour.
 
-#### show.fixed (elementManager, scrollingDown)
+If you want to define your own placement position callback, extend default positions object with the following code:
+
+```javascript
+$.fn.smartSticky.positions['myAwesomePosition1'] = function (positionManager) {
+    if (positionManager.getScrollingManager().scrollingDown()) {
+    	 return { top: 10 };
+    }
+    return { bottom: 10 };
+};
+
+$.fn.smartSticky.positions['myAwesomePosition2'] = function (positionManager) {
+	if (manager.getSettingsManager().isContainerOverflowing()) {
+	     return { top: 0 };
+	}
+	
+	return 'toggle';
+};
+
+```
+This callback can be used in two different ways: 
+- return `Object` with `'top'` or `'bottom'` property which is applied to css together with fixed position.
+- return `String` with name of other defined position to apply.
+
+
+
+#### show.fixed (settingsManager, scrollingDown)
 - Returns: `String`
 
 One of the accepted values of `show.fixed` option property.
@@ -132,7 +160,7 @@ Determines if the fixed element can be shown while scrolling down.
 
 If `show.fixed` is set to `'toggle'`, this option must be set to `true` for properly behaviour.
 
-#### show.scrolling (elementManager, scrollingDown)
+#### show.scrolling (settingsManager, scrollingDown)
 - Returns: `Boolean`
 
 Determines visibility of the fixed element while scrolling.
@@ -156,7 +184,7 @@ show: {
 ```
 
 #### container
-- Type: `HTMLelement`, `JQuery` or `String`
+- Type: `HTMLelement`, `HTMLCollection`, `JQuery` or `String`
 - Default: `null`
 
 The fixed element can be displayed only inside of container area.
@@ -169,10 +197,12 @@ If more elements are included in `JQuery` collection or if they are found by `St
 
 If no element is included in `JQuery` collection or found by `String` selector, default container is used.
 
-#### container (elementManager)
-- Returns: `HTMLelement`, `JQuery` or `String`
+When container is overflowing, this element is used for scrolling instead of window whose scrolling is ignored.
 
-This callback is fired at initialization, when deactivated and on window resize separately for each relative element.
+#### container (elementManager)
+- Returns: `HTMLelement`, `HTMLCollection`, `JQuery` or `String`
+
+This callback is fired at initialization for each relative element.
 
 ```javascript
 container: function (elementManager) {
@@ -207,10 +237,12 @@ By default, the element's outer width in original position is used.
 
 Sets css width property of the fixed element.
 
-#### css.fixed.left (elementManager, scrollingDown) and css.fixed.width (elementManager, scrollingDown)
+#### css.fixed.left (settingsManager) and css.fixed.width (settingsManager)
 - Return `Number` or `String`
 
 Set css left and width property of the fixed element.
+
+If you want to change top or bottom property of the fixed element, define your own placement position callback as described above.
 
 These callbacks are fired at initialization, when activated and on window resize separately for each fixed element.
 
