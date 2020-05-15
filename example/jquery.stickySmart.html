@@ -114,7 +114,7 @@
             <div class="col-md-6 col-lg-4">
                 <div>
                     <h5 class="sticky-smart-8 bg-dark text-light p-2">
-                        My sticky content 8 - custom background
+                        My sticky content 8 - custom background and position
                     </h5>
                     <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Integer rutrum, orci vestibulum ullamcorper ultricies, lacus quam ultricies odio, vitae placerat pede sem sit amet enim. Duis condimentum augue id magna semper rutrum. Nullam sit amet magna in magna gravida vehicula. Etiam bibendum elit eget erat. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos hymenaeos. Donec quis nibh at felis congue commodo. Morbi leo mi, nonummy eget tristique non, rhoncus non leo. Nullam justo enim, consectetuer nec, ullamcorper ac, vestibulum in, elit. Integer rutrum, orci vestibulum ullamcorper ultricies, lacus quam ultricies odio, vitae placerat pede sem sit amet enim. Vestibulum fermentum tortor id mi. Praesent vitae arcu tempor neque lacinia pretium. Maecenas fermentum, sem in pharetra pellentesque, velit turpis volutpat ante, in pharetra metus odio a lectus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. In rutrum. Maecenas ipsum velit, consectetuer eu lobortis ut, dictum at dui. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Duis ante orci, molestie vitae vehicula venenatis, tincidunt ac pede. Praesent id justo in neque elementum ultrices.</p>
                     <p>Praesent in mauris eu tortor porttitor accumsan. Vivamus luctus egestas leo. In laoreet, magna id viverra tincidunt, sem odio bibendum justo, vel imperdiet sapien wisi sed libero. Integer lacinia. Etiam posuere lacus quis dolor. Etiam neque. Duis viverra diam non justo. Maecenas ipsum velit, consectetuer eu lobortis ut, dictum at dui. Nullam at arcu a est sollicitudin euismod. Mauris elementum mauris vitae tortor. Nulla non lectus sed nisl molestie malesuada. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nullam justo enim, consectetuer nec, ullamcorper ac, vestibulum in, elit. Cras elementum.</p>
@@ -280,16 +280,16 @@
             });
 
             $('.sticky-smart-4').smartSticky({
-                container: function (manager) {
-                   return manager.getElement().closest('.row');
+                container: function (settingsManager) {
+                    return settingsManager.getElement().closest('.row');
                 },
                 css: {
                     fixed: {
-                        left: function (manager) {
-                           return manager.getContainer().offset().left;
+                        left: function (settingsManager) {
+                            return settingsManager.getContainer().offset().left;
                         },
-                        width: function (manager) {
-                            return manager.getContainer().outerWidth();
+                        width: function (settingsManager) {
+                            return settingsManager.getContainer().outerWidth();
                         }
                     }
                 }
@@ -322,19 +322,35 @@
                     }
                 }
             });
-            
-            $('.sticky-smart-8').smartSticky();
+
+
+            $.fn.smartSticky.positions['customToggle'] = function (positionManager) {
+                if (positionManager.getScrollingManager().scrollingDown()) {
+                    return { top: 100 };
+                }
+
+                return { bottom: 200 };
+            };
+
+            $('.sticky-smart-8').smartSticky({
+                show: {
+                    fixed: 'customToggle',
+                    scrolling: {
+                        up: true
+                    }
+                }
+            });
 
 
             $('.sticky-smart-9').smartSticky({
                 show: {
                     fixed: 'bottom',
-                    scrolling: function (manager, scrollingBottom) {
-                        if (scrollingBottom) {
-                            manager.getElement().css('color', 'red');
+                    scrolling: function (settingsManager, scrollingManager) {
+                        if (scrollingManager.scrollingDown()) {
+                            settingsManager.getElement().css('color', 'red');
                         }
                         else {
-                            manager.getElement().css('color', 'green');
+                            settingsManager.getElement().css('color', 'green');
                         }
 
                         return true;
@@ -398,12 +414,12 @@
                             return 'bottom';
                         }
                     },
-                    scrolling: function (_manager, scrollingBottom) {
+                    scrolling: function (_settingsManager, scrollingManager) {
                         if ($(window).width() < 768) {
-                            return !scrollingBottom;
+                            return !scrollingManager.scrollingDown();
                         }
 
-                        return scrollingBottom;
+                        return scrollingManager.scrollingDown();
                     }
                 }
             });

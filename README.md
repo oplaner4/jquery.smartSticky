@@ -1,7 +1,7 @@
 # Jquery.smartSticky
 Free, easy to use, javascript library for toggling between relative and fixed position, because of limited support of sticky position even in newer browsers.
 
-Current version: **2.0.0**
+Current version: **2.1.0**
 
 ### Features
 Jquery.smartSticky supports:
@@ -29,7 +29,7 @@ Include the following code in the `<head>` tag of your HTML:
 #### 2. Usage
 
 ```javascript
-$(element).smartSticky([options])
+$('#myElem').smartSticky([options])
 ```
 
 - **options** (optional)
@@ -39,7 +39,7 @@ $(element).smartSticky([options])
   
 #### 3. Initialization
 
-You can use the following code with default settings.
+You can use the following code with default options.
 
 `null` properties are computed automatically by library.
 
@@ -100,7 +100,7 @@ Possible predefined values are `'top'`, `'bottom'` and `'toggle'`.
 
 `'toggle'` places fixed element top while scrolling down and bottom while scrolling up. If used, options `show.scrolling.up` and `show.scrolling.down` must be set to `true`, eventually, callback `show.scrolling` must return `true` for properly behaviour.
 
-If you want to define your own placement position callback, extend default positions object with the following code:
+If you want to define your own placement position callback, extend default positions object like with the following code:
 
 ```javascript
 $.fn.smartSticky.positions['myAwesomePosition1'] = function (positionManager) {
@@ -111,7 +111,7 @@ $.fn.smartSticky.positions['myAwesomePosition1'] = function (positionManager) {
 };
 
 $.fn.smartSticky.positions['myAwesomePosition2'] = function (positionManager) {
-	if (manager.getSettingsManager().isContainerOverflowing()) {
+	if (positionManager.getSettingsManager().isContainerOverflowing()) {
 	     return { top: 0 };
 	}
 	
@@ -120,17 +120,15 @@ $.fn.smartSticky.positions['myAwesomePosition2'] = function (positionManager) {
 
 ```
 This callback can be used in two different ways: 
-- return `Object` with `'top'` or `'bottom'` property which is applied to css together with fixed position.
+- return `Object` with `'top'` or `'bottom'` property which is applied as css together with fixed position.
 - return `String` with name of other defined position to apply.
 
 
 
-#### show.fixed (settingsManager, scrollingDown)
+#### show.fixed (settingsManager, scrollingManager)
 - Returns: `String`
 
 One of the accepted values of `show.fixed` option property.
-
-This callback is fired at initialization, when activated and on window scroll and resize separately for each fixed element.
 
 ```javascript
 show: {
@@ -160,25 +158,23 @@ Determines if the fixed element can be shown while scrolling down.
 
 If `show.fixed` is set to `'toggle'`, this option must be set to `true` for properly behaviour.
 
-#### show.scrolling (settingsManager, scrollingDown)
+#### show.scrolling (settingsManager, scrollingManager)
 - Returns: `Boolean`
 
 Determines visibility of the fixed element while scrolling.
 
 Use `true` to show and `false` to hide.
 
-This callback is fired at initialization, when activated and on window scroll and resize separately for each fixed element.
-
 If `show.fixed` is set to `'toggle'`, this callback must return `true` for properly behaviour.
 
 ```javascript
 show: {
-    scrolling: function (elementManager, scrollingDown) {    	
+    scrolling: function (settingsManager, scrollingManager) {
         if ($(window).width() < 768) {
 	    /* on mobile phones */
-            return !scrollingBottom;
+            return !scrollingManager.scrollingDown();
         }
-        return scrollingBottom;
+        return scrollingManager.scrollingDown();
     }
 }
 ```
@@ -199,25 +195,23 @@ If no element is included in `JQuery` collection or found by `String` selector, 
 
 When container is overflowing, this element is used for scrolling instead of window whose scrolling is ignored.
 
-#### container (elementManager)
+#### container (settingsManager)
 - Returns: `HTMLelement`, `HTMLCollection`, `JQuery` or `String`
 
-This callback is fired at initialization for each relative element.
-
 ```javascript
-container: function (elementManager) {
+container: function (settingsManager) {
     /*
     	<div class="row">
     	    <div class="col-3">
     	         <div class="sticky-smart"></div>
-	    </div>
+			</div>
     	    <div class="col-9">
 		
-	    </div>
+			</div>
     	</div>
     */
 
-    return elementManager.getElement().closest('.row');
+    return settingsManager.getElement().closest('.row');
 }
 ```
 
@@ -244,28 +238,47 @@ Set css left and width property of the fixed element.
 
 If you want to change top or bottom property of the fixed element, define your own placement position callback as described above.
 
-These callbacks are fired at initialization, when activated and on window resize separately for each fixed element.
-
 ```javascript
 css: {
     fixed: {
-    	left: function (elementManager, scrollingDown) {    	
+    	left: function (settingsManager) {
     	    if ($(window).width() < 768) {
-		/* on mobile phones */
+				/* on mobile phones */
     	        return 0;
     	    }
-    	    return elementManager.getElement().offset().left;
+    	    return settingsManager.getElement().offset().left;
     	},
-	width: function (elementManager, scrollingDown) {    	
+	width: function (settingsManager) {
     	    if ($(window).width() < 768) {
-		/* on mobile phones */
+				/* on mobile phones */
     	        return '100%';
     	    }
-    	    return elementManager.getElement().outerWidth();
+    	    return settingsManager.getElement().outerWidth();
     	}
     }
 }
 ```
+
+### Options callbacks arguments
+
+smartSticky library works with the following managers which are provided in callbacks as arguments. You can access their methods (getters and boolean queries) to find out useful information.
+
+**Attention:** Using of other manager's methods then listed below (etc. private setters), or modifying its private underline properties can cause unexpectable behaviour.
+
+#### settingsManager
+- Type: `Object`
+- Methods: `getElement()`, `getContainer()`, `getOptions()` and `isContainerOverflowing()`
+
+
+#### scrollingManager
+- Type: `Object`
+- Methods: `scrollingDown()` and `getCurrentScrollTop()`
+
+
+#### positionManager
+- Type: `Object`
+- Methods: `getSettingsManager()`, `getScrollingManager()`, `getFixedPosition()` and `getYCoordManager()`
+
 
 ### Defaults
 If you want to change default settings, use the following code:
@@ -313,14 +326,14 @@ Enables component.
 Disables component.
 
 #### hide ()
-Hides fixed element.
+Hides fixed element until it is about to be shown again.
 
 ### Events
 
 Use the following code to set callback on event.
 
 ```javascript
-$('#myElem').smartSticky().on('smartSticky.eventName', function (e, elementManager) {
+$('#myElem').smartSticky().on('smartSticky.eventName', function (e, settingsManager) {
 	
 });
 ```
@@ -329,7 +342,7 @@ $('#myElem').smartSticky().on('smartSticky.eventName', function (e, elementManag
 Fires when element becames fixed.
 
 ```javascript
-$('#myElem').smartSticky().on('smartSticky.activate', function (e, elementManager) {
+$('#myElem').smartSticky().on('smartSticky.activate', function (e, settingsManager) {
 	$(this).css('border', '1px solid black');
 });
 ```

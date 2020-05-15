@@ -1,5 +1,5 @@
 /**
-* jquery.smartSticky 2.0.0
+* jquery.smartSticky 2.1.1
 * https://github.com/oplaner4/jquery.smartSticky
 * by Ondrej Planer, oplaner4@gmail.com
 * 
@@ -41,7 +41,7 @@
 
             $.fn.smartSticky.windowScrollingManager.onScrolling(function () {
                 if (self.activated()) {
-                    self.getPositionManager().recalculateFixedPosition();
+                    self.getPositionManager().setYCoordManager().recalculateFixedPosition();
                 }
             });
         }
@@ -79,10 +79,10 @@
                 }
 
                 if (this.hide().getPositionManager().canBeShownDueToOrigPosition()) {
-                    if (!this.getPositionManager().outOfContainer()) {
+                    if (!this.getPositionManager().prepareFixedPosition().outOfContainer()) {
                         if (this.getPositionManager().canBeShownDueToScrolling()) {
                             this.getSettingsManager().getElement().removeClass($.fn.smartSticky.classes.invisible);
-                            this.getPositionManager().setFixedPosition().recalculateFixedPosition();
+                            this.getPositionManager().recalculateFixedPosition();
                         }
                     }
                 }
@@ -211,7 +211,7 @@
             l = l(this);
         }
 
-        if (Number.isFinite(l) || l instanceof String || typeof l === 'string') {
+        if (l === parseFloat(l) || l instanceof Number || l instanceof String || typeof l === 'string') {
             return l;
         }
 
@@ -225,7 +225,7 @@
             w = w(this);
         }
 
-        if (Number.isFinite(w) || w instanceof String || typeof w === 'string') {
+        if (w === parseFloat(w) || w instanceof Number || w instanceof String || typeof w === 'string') {
             return w;
         }
 
@@ -251,10 +251,31 @@
 
 
 
+    var smartStickyPositionYCoordManager = function (yCoordObj) {
+        this._yCoordObj = yCoordObj instanceof Object ? yCoordObj : { top: 0 };
+    };
+
+    smartStickyPositionYCoordManager.prototype.isCalculatedFromTop = function () {
+        return this._yCoordObj.hasOwnProperty('top');
+    };
+
+    smartStickyPositionYCoordManager.prototype.getFromTop = function () {
+        return this.isCalculatedFromTop() ? this._yCoordObj.top : 'initial';
+    };
+
+    smartStickyPositionYCoordManager.prototype.getFromBottom = function () {
+        return !this.isCalculatedFromTop() ? this._yCoordObj.bottom : 'initial';
+    };
+
+
+
+
     var smartStickyPositionManager = function (settingsManagerInstance, scrollingManagerInstance) {
         this._settingsManagerInstance = settingsManagerInstance;
         this._scrollingManagerInstance = scrollingManagerInstance;
-        this._fixedPosition = $.fn.smartSticky.positions[0];
+        this._fixedPosition = null;
+        this._yCoordManagerInstance = null;
+        this.prepareFixedPosition();
     };
 
     smartStickyPositionManager.prototype.getSettingsManager = function () {
@@ -263,6 +284,15 @@
 
     smartStickyPositionManager.prototype.getScrollingManager = function () {
         return this._scrollingManagerInstance;
+    };
+
+    smartStickyPositionManager.prototype.getYCoordManager = function () {
+        return this._yCoordManagerInstance;
+    };
+
+    smartStickyPositionManager.prototype.setYCoordManager = function () {
+        this._yCoordManagerInstance = new smartStickyPositionYCoordManager($.fn.smartSticky.positions[this.getFixedPosition()](this));
+        return this;
     };
 
     smartStickyPositionManager.prototype.setOrigPosition = function () {
@@ -281,24 +311,18 @@
     };
 
     smartStickyPositionManager.prototype.recalculateFixedPosition = function () {
-        var topAndBottom = $.fn.smartSticky.positions[this.getFixedPosition()](this);
-
         this.getSettingsManager().getElement().css({
-            top: topAndBottom.hasOwnProperty('top') ? topAndBottom.top : 'initial',
-            bottom: topAndBottom.hasOwnProperty('bottom') ? topAndBottom.bottom : 'initial'
+            top: this.getYCoordManager().getFromTop(),
+            bottom: this.getYCoordManager().getFromBottom()
         });
 
         return this;
     };
 
-    smartStickyPositionManager.prototype.toBePlacedBottom = function () {
-        return this.getFixedPosition() === 'bottom';
-    };
-
     smartStickyPositionManager.prototype.outOfOrigPositionAbove = function () {
         return this.getSettingsManager().getOrigOffsetTop() -
             this.getSettingsManager().getOptions().show.delay -
-            this.getScrollingManager().getOverflowingElement().height() >
+            this.getScrollingManager().getOverflowingElement().outerHeight() >
             this.getScrollingManager().getCurrentScrollTop();
     };
 
@@ -315,13 +339,13 @@
 
     smartStickyPositionManager.prototype.outOfContainerAbove = function () {
         return $.fn.smartSticky.windowScrollingManager.getCurrentScrollTop() +
-            (this.toBePlacedBottom() ? $.fn.smartSticky.windowScrollingManager.getOverflowingElement().height() - this.getSettingsManager().getElement().outerHeight() : 0) <
+            (this.getYCoordManager().isCalculatedFromTop() ? this.getYCoordManager().getFromTop() : $.fn.smartSticky.windowScrollingManager.getOverflowingElement().height() - this.getSettingsManager().getElement().outerHeight() - this.getYCoordManager().getFromBottom()) <
             this.getSettingsManager().getContainer().offset().top;
     };
 
     smartStickyPositionManager.prototype.outOfContainerUnder = function () {
         return $.fn.smartSticky.windowScrollingManager.getCurrentScrollTop() +
-            (this.toBePlacedBottom() ? $.fn.smartSticky.windowScrollingManager.getOverflowingElement().height() : this.getSettingsManager().getElement().outerHeight()) >
+            (this.getYCoordManager().isCalculatedFromTop() ? this.getSettingsManager().getElement().outerHeight() + this.getYCoordManager().getFromTop() : $.fn.smartSticky.windowScrollingManager.getOverflowingElement().height() - this.getYCoordManager().getFromBottom()) >
             this.getSettingsManager().getContainer().offset().top +
             this.getSettingsManager().getContainer().outerHeight();
     };
@@ -352,7 +376,7 @@
 
     smartStickyPositionManager.prototype.canBeShownDueToScrolling = function () {
         if (this.getSettingsManager().getOptions().show.scrolling instanceof Function) {
-            return this.getSettingsManager().getOptions().show.scrolling(this.getSettingsManager(), this.getScrollingManager().scrollingDown()) === true ? true : false;
+            return this.getSettingsManager().getOptions().show.scrolling(this.getSettingsManager(), this.getScrollingManager()) === true ? true : false;
         }
 
         if (this.getScrollingManager().scrollingDown()) {
@@ -371,10 +395,10 @@
         return this._fixedPosition;
     };
 
-    smartStickyPositionManager.prototype.setFixedPosition = function () {
+    smartStickyPositionManager.prototype.prepareFixedPosition = function () {
         var p = this.getSettingsManager().getOptions().show.fixed;
         if (p instanceof Function) {
-            p = p(this.getSettingsManager(), this.getScrollingManager().scrollingDown());
+            p = p(this.getSettingsManager(), this.getScrollingManager());
         }
 
         this._fixedPosition = Object.keys($.fn.smartSticky.positions)[0];
@@ -384,7 +408,7 @@
             p = $.fn.smartSticky.positions[this._fixedPosition](this);
         }
 
-        return this;
+        return this.setYCoordManager();
     };
 
 
@@ -406,7 +430,7 @@
     };
 
     smartStickyScrollingManager.prototype.scrollingDown = function () {
-        return this._lastScrollTop < this.getCurrentScrollTop();
+        return this._lastScrollTop <= this.getCurrentScrollTop();
     };
 
     smartStickyScrollingManager.prototype.getCurrentScrollTop = function () {
