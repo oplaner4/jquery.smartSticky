@@ -1,0 +1,29 @@
+{
+  "name": "smartSticky",
+  "title": "jQuery smartSticky",
+  "description": "Free, easy to use, javascript library for toggling between relative and fixed position, because of limited support of sticky position even in newer browsers.",
+  "keywords": [
+    "fixed position",
+    "sticky position"
+  ],
+  "version": "2.1.1",
+  "author": {
+    "name": "Ondřej Planer",
+    "url": "https://github.com/oplaner4/"
+  },
+  "maintainers": [
+  ],
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "http://www.opensource.org/licenses/mit-license.php"
+    }
+  ],
+  "bugs": "https://github.com/oplaner4/jquery.smartSticky/issues",
+  "homepage": "https://github.com/oplaner4/jquery.smartSticky/",
+  "docs": "https://github.com/oplaner4/jquery.smartSticky/blob/master/README.md",
+  "download": "https://github.com/oplaner4/jquery.smartSticky/archive/master.zip",
+  "dependencies": {
+    "jquery": ">=2.0.0"
+  }
+}
