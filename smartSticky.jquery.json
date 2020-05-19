@@ -3,8 +3,8 @@
   "title": "jQuery smartSticky",
   "description": "Free, easy to use, javascript library for toggling between relative and fixed position, because of limited support of sticky position even in newer browsers.",
   "keywords": [
-    "fixed position",
-    "sticky position"
+    "fixed",
+    "sticky"
   ],
   "version": "2.1.1",
   "author": {
