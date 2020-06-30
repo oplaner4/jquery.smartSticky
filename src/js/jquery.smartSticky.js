@@ -1,5 +1,5 @@
 /**
-* jquery.smartSticky 2.1.1
+* jquery.smartSticky 2.3.0
 * https://github.com/oplaner4/jquery.smartSticky
 * by Ondrej Planer, oplaner4@gmail.com
 * 
@@ -128,8 +128,7 @@
     };
 
     smartStickyManager.prototype.activate = function () {
-        this.getSettingsManager().preparePlaceholder();
-        this.getSettingsManager().getElement().removeClass($.fn.smartSticky.classes.background).css({
+        this.getSettingsManager().preparePlaceholder().getElement().removeClass($.fn.smartSticky.classes.background).css({
             left: this.getSettingsManager().getFixedLeft(),
             width: this.getSettingsManager().getFixedWidth()
         }).addClass($.fn.smartSticky.classes.active).trigger('smartSticky.activate', [this.getSettingsManager()]);
@@ -260,11 +259,11 @@
     };
 
     smartStickyPositionYCoordManager.prototype.getFromTop = function () {
-        return this.isCalculatedFromTop() ? this._yCoordObj.top : 'initial';
+        return this.isCalculatedFromTop() ? this._yCoordObj.top : 'auto';
     };
 
     smartStickyPositionYCoordManager.prototype.getFromBottom = function () {
-        return !this.isCalculatedFromTop() ? this._yCoordObj.bottom : 'initial';
+        return !this.isCalculatedFromTop() ? this._yCoordObj.bottom : 'auto';
     };
 
 
@@ -296,10 +295,10 @@
     };
 
     smartStickyPositionManager.prototype.setOrigPosition = function () {
-        this.getSettingsManager().getPlaceholder().css('height', 'initial');
+        this.getSettingsManager().getPlaceholder().css('height', 'auto');
         this.getSettingsManager().getElement()
             .removeClass($.fn.smartSticky.classes.active)
-            .css({ left: 'initial', top: 'initial', bottom: 'initial', width: 'initial' })
+            .css({ left: 'auto', top: 'auto', bottom: 'auto', width: 'auto' })
             .data({
                 offsetTop: this.getSettingsManager().getElement().offset().top +
                     (this.getSettingsManager().isContainerOverflowing() ? this.getScrollingManager().getCurrentScrollTop() - this.getScrollingManager().getOverflowingElement().offset().top : 0),
