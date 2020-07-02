@@ -1,5 +1,5 @@
 /**
-* jquery.smartSticky 2.3.0
+* jquery.smartSticky 2.3.1
 * https://github.com/oplaner4/jquery.smartSticky
 * by Ondrej Planer, oplaner4@gmail.com
 * 
@@ -133,7 +133,7 @@
             width: this.getSettingsManager().getFixedWidth()
         }).addClass($.fn.smartSticky.classes.active).trigger('smartSticky.activate', [this.getSettingsManager()]);
 
-        if (this.getSettingsManager().getElement().css('background-color') === 'rgba(0, 0, 0, 0)') {
+        if (new Array('rgba(0, 0, 0, 0)', 'transparent').indexOf(this.getSettingsManager().getElement().css('background-color')) > -1) {
             this.getSettingsManager().getElement().addClass($.fn.smartSticky.classes.background);
         }
 
@@ -415,6 +415,7 @@
     var smartStickyScrollingManager = function (overflowingElement) {
         var self = this;
         self._lastScrollTop = 0;
+        self._lastScrollingDown = true;
         self._onScrollingCallbackArr = new Array();
         self._overflowingElement = overflowingElement.on('scroll', function () {
             self._onScrollingCallbackArr.forEach(function (callback) {
@@ -429,7 +430,11 @@
     };
 
     smartStickyScrollingManager.prototype.scrollingDown = function () {
-        return this._lastScrollTop <= this.getCurrentScrollTop();
+        if (this._lastScrollTop === this.getCurrentScrollTop()) {
+            return this._lastScrollingDown;
+        }
+
+        return this._lastScrollingDown = this._lastScrollTop < this.getCurrentScrollTop();
     };
 
     smartStickyScrollingManager.prototype.getCurrentScrollTop = function () {
