@@ -48,7 +48,7 @@ $(function() {
     $('#myElem').smartSticky({
         show: {
             delay: 50,
-			immediately: false,
+	    immediately: false,
             original: {
                 under: true,
                 above: false
