@@ -1,7 +1,7 @@
 # Jquery.smartSticky
 Free, easy to use, javascript library for toggling between relative and fixed position, because of limited support of sticky position even in newer browsers.
 
-Current stable version: **2.3.1**
+Current stable version: **2.4.0**
 
 ### Features
 Jquery.smartSticky supports:
@@ -48,13 +48,14 @@ $(function() {
     $('#myElem').smartSticky({
         show: {
             delay: 50,
+			immediately: false,
             original: {
                 under: true,
                 above: false
             },
             fixed: 'top',
             scrolling: {
-                up: false,
+                up: true,
                 down: true
             }
         },
@@ -78,6 +79,12 @@ $(function() {
 
 ScrollTop value that postpones showing of the fixed element and accelerates its hiding on return. Use `0` to deactivate.
 
+#### show.immediately
+- Type: `Boolean`
+- Default: `false`
+
+Determines if the element becomes fixed immediately when its original position is reached. If set to `'true'` option `'show.delay'` is ignored.
+
 #### show.original.above
 - Type: `Boolean`
 - Default: `false`
@@ -98,7 +105,7 @@ Determines placement of the fixed element.
 
 Possible predefined values are `'top'`, `'bottom'` and `'toggle'`.
 
-`'toggle'` places fixed element top while scrolling down and bottom while scrolling up. If used, options `show.scrolling.up` and `show.scrolling.down` must be set to `true`, eventually, callback `show.scrolling` must return `true` for properly behaviour.
+`'toggle'` places fixed element top while scrolling down and bottom while scrolling up. If used, options `show.scrolling.up` and `show.scrolling.down` should be set to `true`, eventually, callback `show.scrolling` should return `true` for properly behaviour.
 
 If you want to define your own placement position callback, extend default positions object like with the following code:
 
@@ -144,11 +151,11 @@ show: {
 
 #### show.scrolling.up
 - Type: `Boolean`
-- Default: `false`
+- Default: `true`
 
 Determines if the fixed element can be shown while scrolling up. 
 
-If `show.fixed` is set to `'toggle'`, this option must be set to `true` for properly behaviour.
+If `show.fixed` is set to `'toggle'`, this option should be set to `true` for properly behaviour.
 
 #### show.scrolling.down
 - Type: `Boolean`
@@ -156,7 +163,7 @@ If `show.fixed` is set to `'toggle'`, this option must be set to `true` for prop
 
 Determines if the fixed element can be shown while scrolling down. 
 
-If `show.fixed` is set to `'toggle'`, this option must be set to `true` for properly behaviour.
+If `show.fixed` is set to `'toggle'`, this option should be set to `true` for properly behaviour.
 
 #### show.scrolling (settingsManager, scrollingManager)
 - Returns: `Boolean`
@@ -165,7 +172,7 @@ Determines visibility of the fixed element while scrolling.
 
 Use `true` to show and `false` to hide.
 
-If `show.fixed` is set to `'toggle'`, this callback must return `true` for properly behaviour.
+If `show.fixed` is set to `'toggle'`, this callback should return `true` for properly behaviour.
 
 ```javascript
 show: {
