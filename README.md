@@ -219,7 +219,7 @@ container: function (settingsManager) {
 			</div>
     	    <div class="col-9">
 		
-			</div>
+            </div>
     	</div>
     */
 
@@ -255,14 +255,14 @@ css: {
     fixed: {
     	left: function (settingsManager) {
     	    if ($(window).width() < 768) {
-				/* on mobile phones */
+		/* on mobile phones */
     	        return 0;
     	    }
     	    return settingsManager.getElement().offset().left;
     	},
 	width: function (settingsManager) {
     	    if ($(window).width() < 768) {
-				/* on mobile phones */
+		/* on mobile phones */
     	        return '100%';
     	    }
     	    return settingsManager.getElement().outerWidth();
