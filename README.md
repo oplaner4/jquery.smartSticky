@@ -48,7 +48,7 @@ You can use the following code with default options.
 $(function() {
     $('#myElem').smartSticky({
         show: {
-			immediately: false,  /* implicitely set to true when container is overflowing */
+	    immediately: false,  /* implicitely set to true when container is overflowing */
             delay: 50,  /* ignored when immediately set to true */
             original: {
                 under: true,
