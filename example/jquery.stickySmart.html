@@ -211,8 +211,65 @@
                     </h5>
                 </div>
             </div>
+            <div class="col-md-6 col-lg-4">
+                <table class="table table-dark table-hover">
+                    <thead class="sticky-smart-15 bg-dark p-0">
+                        <tr>
+                            <th scope="col">fixed</th>
+                            <th scope="col">table</th>
+                            <th scope="col">header</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>a</td>
+                            <td>b</td>
+                            <td>c</td>
+                        </tr>
+                        <tr>
+                            <td>d</td>
+                            <td>e</td>
+                            <td>f</td>
+                        </tr>
+                        <tr>
+                            <td>g</td>
+                            <td>h</td>
+                            <td>i</td>
+                        </tr>
+                        <tr>
+                            <td>j</td>
+                            <td>k</td>
+                            <td>l</td>
+                        </tr>
+                        <tr>
+                            <td>m</td>
+                            <td>n</td>
+                            <td>o</td>
+                        </tr>
+                        <tr>
+                            <td>p</td>
+                            <td>q</td>
+                            <td>r</td>
+                        </tr>
+                        <tr>
+                            <td>s</td>
+                            <td>t</td>
+                            <td>u</td>
+                        </tr>
+                        <tr>
+                            <td>v</td>
+                            <td>w</td>
+                            <td>x</td>
+                        </tr>
+                        <tr>
+                            <td>y</td>
+                            <td>z</td>
+                            <td>*</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
-
         <div class="row">
             <nav class="navbar navbar-expand-lg navbar-light bg-light navbar-sticky-smart">
                 <a class="navbar-brand" href="#">Navbar</a>
@@ -250,7 +307,7 @@
                 </div>
             </nav>
 
-            <h4 class="mt-3">Sticky navbar example</h4>
+            <h4 class="mt-3 w-100">Sticky navbar example</h4>
 
             <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Integer rutrum, orci vestibulum ullamcorper ultricies, lacus quam ultricies odio, vitae placerat pede sem sit amet enim. Duis condimentum augue id magna semper rutrum. Nullam sit amet magna in magna gravida vehicula. Etiam bibendum elit eget erat. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos hymenaeos. Donec quis nibh at felis congue commodo. Morbi leo mi, nonummy eget tristique non, rhoncus non leo. Nullam justo enim, consectetuer nec, ullamcorper ac, vestibulum in, elit. Integer rutrum, orci vestibulum ullamcorper ultricies, lacus quam ultricies odio, vitae placerat pede sem sit amet enim. Vestibulum fermentum tortor id mi. Praesent vitae arcu tempor neque lacinia pretium. Maecenas fermentum, sem in pharetra pellentesque, velit turpis volutpat ante, in pharetra metus odio a lectus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. In rutrum. Maecenas ipsum velit, consectetuer eu lobortis ut, dictum at dui. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Duis ante orci, molestie vitae vehicula venenatis, tincidunt ac pede. Praesent id justo in neque elementum ultrices.</p>
             <p>Praesent in mauris eu tortor porttitor accumsan. Vivamus luctus egestas leo. In laoreet, magna id viverra tincidunt, sem odio bibendum justo, vel imperdiet sapien wisi sed libero. Integer lacinia. Etiam posuere lacus quis dolor. Etiam neque. Duis viverra diam non justo. Maecenas ipsum velit, consectetuer eu lobortis ut, dictum at dui. Nullam at arcu a est sollicitudin euismod. Mauris elementum mauris vitae tortor. Nulla non lectus sed nisl molestie malesuada. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nullam justo enim, consectetuer nec, ullamcorper ac, vestibulum in, elit. Cras elementum.</p>
@@ -267,7 +324,7 @@
 
     <script>
         $(function () {
-           $('.sticky-smart-1').smartSticky({
+            $('.sticky-smart-1').smartSticky({
                 show: {
                     delay: 50,
                     immediately: false,
@@ -289,7 +346,7 @@
                     }
                 }
             });
-
+            
             $('.sticky-smart-2').smartSticky({
                 show: {
                     fixed: 'bottom',
@@ -339,13 +396,12 @@
 
             $('.sticky-smart-7').smartSticky({
                 show: {
-                    fixed: 'toggle',
                     original: {
                         above: true
                     }
                 }
             });
-
+            
 
             $.fn.smartSticky.positions['customToggle'] = function (positionManager) {
                 if (positionManager.getScrollingManager().scrollingDown()) {
@@ -362,7 +418,9 @@
             });
 
 
-            $('.sticky-smart-9').smartSticky({
+            $('.sticky-smart-9').on('smartSticky.deactivate', function () {
+                $(this).css('color', 'black');
+            }).smartSticky({
                 show: {
                     fixed: 'bottom',
                     scrolling: function (settingsManager, scrollingManager) {
@@ -376,8 +434,6 @@
                         return true;
                     }
                 }
-            }).on('smartSticky.deactivate', function () {
-                $(this).css('color', 'black');
             });
 
 
@@ -396,13 +452,13 @@
             var stickySmart11BtnEnable = $('button.sticky-smart-enable', stickySmart11);
             var stickySmart11BtnDisable = $('button.sticky-smart-disable', stickySmart11);
 
-            stickySmart11.smartSticky().on('smartSticky.activate', function () {
+            stickySmart11.on('smartSticky.activate', function () {
                 stickySmart11BtnDisable.show();
                 stickySmart11BtnEnable.hide();
             }).on('smartSticky.deactivate', function () {
                 stickySmart11BtnDisable.hide();
                     stickySmart11BtnEnable.show();
-                }).smartSticky('disable');
+            }).smartSticky().smartSticky('disable');
 
             stickySmart11BtnDisable.on('click', function () {
                 stickySmart11.smartSticky('disable');
@@ -416,11 +472,12 @@
             var stickySmart12 = $('.sticky-smart-12');
             var stickySmart12Btn = $('button.sticky-smart-hide', stickySmart12);
 
-            stickySmart12.smartSticky().on('smartSticky.activate', function () {
+            stickySmart12.on('smartSticky.activate', function () {
                 stickySmart12Btn.show();
             }).on('smartSticky.deactivate', function () {
                 stickySmart12Btn.hide();
-            });
+            }).smartSticky();
+
             stickySmart12Btn.on('click', function () {
                 stickySmart12.smartSticky('hide');
             });
@@ -457,6 +514,12 @@
                         above: true
                     },
                     fixed: 'bottom',
+                    immediately: true
+                }
+            });
+
+            $('.sticky-smart-15').smartSticky({
+                show: {
                     immediately: true
                 }
             });

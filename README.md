@@ -1,7 +1,7 @@
 # Jquery.smartSticky
-Free, easy to use, javascript library for toggling between relative and fixed position, because of limited support of sticky position even in newer browsers.
+Free, easy to use, javascript library for toggling between original and fixed position, because of limited support of sticky position even in newer browsers.
 
-Current stable version: **2.4.0**
+Current stable version: **2.5.0**
 
 ### Features
 Jquery.smartSticky supports:
@@ -10,6 +10,7 @@ Jquery.smartSticky supports:
 * Displaying of fixed element only inside of container area
 * Implementation of own callbacks and positions
 * Inner overflowing containers
+* Support of fixed header in tables
 
 ### Installation and dependencies
 SmartSticky is built on and works properly with [jQuery](http://jquery.com/).
@@ -47,13 +48,13 @@ You can use the following code with default options.
 $(function() {
     $('#myElem').smartSticky({
         show: {
-            delay: 50,
-	    immediately: false,
+			immediately: false,  /* implicitely set to true when container is overflowing */
+            delay: 50,  /* ignored when immediately set to true */
             original: {
                 under: true,
                 above: false
             },
-            fixed: 'top',
+            fixed: 'top',  /* ignored when container is overflowing */
             scrolling: {
                 up: true,
                 down: true
@@ -85,6 +86,8 @@ ScrollTop value that postpones showing of the fixed element and accelerates its 
 
 Determines if the element becomes fixed immediately when its original position is reached. If set to `'true'` option `'show.delay'` is ignored.
 
+When container is overflowing, this option is implicitely set to `'true'` and any modification is ignored.
+
 #### show.original.above
 - Type: `Boolean`
 - Default: `false`
@@ -105,6 +108,8 @@ Determines placement of the fixed element.
 
 Possible predefined values are `'top'`, `'bottom'` and `'toggle'`.
 
+When container is overflowing, this option is implicitely set to `'toggle'` and any modification is ignored.
+
 `'toggle'` places fixed element top while scrolling down and bottom while scrolling up. If used, options `show.scrolling.up` and `show.scrolling.down` should be set to `true`, eventually, callback `show.scrolling` should return `true` for properly behaviour.
 
 If you want to define your own placement position callback, extend default positions object like with the following code:
@@ -117,9 +122,9 @@ $.fn.smartSticky.positions['myAwesomePosition1'] = function (positionManager) {
     return { bottom: 10 };
 };
 
-$.fn.smartSticky.positions['myAwesomePosition2'] = function (positionManager) {
-	if (positionManager.getSettingsManager().isContainerOverflowing()) {
-	     return { top: 0 };
+$.fn.smartSticky.positions['myAwesomePosition2'] = function () {
+	if ($(window).outerWidth() < 900) {
+	     return { bottom: 0 };
 	}
 	
 	return 'toggle';
@@ -337,25 +342,31 @@ Hides fixed element until it is about to be shown again.
 
 ### Events
 
-Use the following code to set callback on event.
+Use the following code to set callback on event. Set them before smartSticky initialization.
 
 ```javascript
-$('#myElem').smartSticky().on('smartSticky.eventName', function (e, settingsManager) {
+$('#myElem').on('smartSticky.eventName', function (e, settingsManager) {
 	
-});
+}).smartSticky();
 ```
 
 #### activate
-Fires when element becames fixed.
+Fires when element's original position is .
 
 ```javascript
-$('#myElem').smartSticky().on('smartSticky.activate', function (e, settingsManager) {
+$('#myElem').on('smartSticky.activate', function (e, settingsManager) {
 	$(this).css('border', '1px solid black');
-});
+}).smartSticky();
 ```
+
+#### activated
+Fires immediately after element has been activated.
 
 #### deactivate
 Fires when element becames relative.
+
+#### deactivated
+Fires immediately after element has been deactivated.
 
 ### License
 jquery.smartSticky may be freely distributed under the MIT license.

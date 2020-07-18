@@ -1,5 +1,5 @@
 /**
-* jquery.smartSticky 2.4.0
+* jquery.smartSticky 2.5.0
 * https://github.com/oplaner4/jquery.smartSticky
 * by Ondrej Planer, oplaner4@gmail.com
 * 
@@ -13,31 +13,30 @@
  * PRESERVE THIS PLEASE
 */
 
-.sticky-smart, .sticky-smart-container {
+.sticky-smart {
+    position: fixed;
+}
+
+.sticky-smart-container {
     position: relative;
 }
 
-.sticky-smart.sticky-smart-active {
-    position: fixed;
-    z-index: 1048;
-    padding: .5rem 15px;
-    -webkit-box-shadow: 0 0rem 2rem rgba(0,0,0,.15);
-    box-shadow: 0 0rem 2rem rgba(0,0,0,.15);
-    -webkit-transition: opacity .1s ease-in-out;
-    -o-transition: opacity .1s ease-in-out;
-    transition: opacity .1s ease-in-out;
-    margin: 0;
-}
-
-    .sticky-smart.sticky-smart-active.sticky-smart-invisible {
-        opacity: 0;
-        visibility: hidden;
+    .sticky-smart.sticky-smart-active {
+        z-index: 1048;
+        padding: .5rem 15px;
+        -webkit-box-shadow: 0 0rem 2rem rgba(0,0,0,.15);
+        box-shadow: 0 0rem 2rem rgba(0,0,0,.15);
+        -webkit-transition: opacity .1s ease-in-out;
+        -o-transition: opacity .1s ease-in-out;
+        transition: opacity .1s ease-in-out;
+        margin: 0;
     }
 
-    .sticky-smart.sticky-smart-active.sticky-smart-background {
-        background-color: white;
-    }
+        .sticky-smart.sticky-smart-active.sticky-smart-invisible, .sticky-smart-placeholder {
+            opacity: 0;
+            visibility: hidden;
+        }
 
-    .sticky-smart-placeholder {
-        width: 100%;
-    }
+        .sticky-smart.sticky-smart-active.sticky-smart-background {
+            background-color: white;
+        }
