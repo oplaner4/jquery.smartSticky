@@ -1,5 +1,5 @@
 /**
-* jquery.smartSticky 2.5.0
+* jquery.smartSticky 2.6.0
 * https://github.com/oplaner4/jquery.smartSticky
 * by Ondrej Planer, oplaner4@gmail.com
 * 
@@ -58,8 +58,10 @@
 
         $.fn.smartSticky.windowScrollingManager.getOverflowingElement().on('resize', function () {
             self.getPositionManager().setOrigPosition();
+            self.getSettingsManager().preparePlaceholder();
+
             if (
-                self.adjustToCurrentScrollTop().getSettingsManager().preparePlaceholder()
+                self.adjustToCurrentScrollTop().getSettingsManager()
                 .getElement().prop('tagName').toLowerCase() === 'thead'
             ) {
                 var ths = self.getSettingsManager().getPlaceholder().find('th');
@@ -68,6 +70,8 @@
                 });
             }
         }).trigger('resize');
+
+        self.getSettingsManager().getElement().trigger('smartSticky.init', [self.getSettingsManager()]);
     };
 
     smartStickyManager.prototype.getPositionManager = function () {
@@ -142,7 +146,7 @@
 
     smartStickyManager.prototype.activate = function () {
         this.getSettingsManager().preparePlaceholder().getElement().removeClass($.fn.smartSticky.classes.background).css({
-            left: this.getSettingsManager().getFixedLeft(),
+            left: 'calc(' + this.getSettingsManager().getFixedLeft() + ' - ' + this.getSettingsManager().getElement().parent().offset().left + 'px)',
             width: this.getSettingsManager().getFixedWidth()
         }).trigger('smartSticky.activate', [this.getSettingsManager()])
             .addClass($.fn.smartSticky.classes.active)
@@ -168,7 +172,17 @@
         this._isContainerOverflowing = null;
         this._elem = elem;
         this._placeholder = elem.clone(false).addClass($.fn.smartSticky.classes.placeholder).removeAttr('id');
-        this._elem.addClass($.fn.smartSticky.classes.root).before(this._placeholder);
+        this._elem.addClass($.fn.smartSticky.classes.root)
+            .before(this._placeholder)
+            .parent().addClass($.fn.smartSticky.classes.parent);
+
+        $('label', this._placeholder)
+            .removeAttr('for');
+        $('input, select, textarea', this._placeholder)
+            .removeAttr('name')
+            .removeAttr('id');
+
+
         this.setOptions(options, false).setContainer();
     };
 
@@ -223,11 +237,15 @@
             l = l(this);
         }
 
-        if (l === parseFloat(l) || l instanceof Number || l instanceof String || typeof l === 'string') {
+        if (l instanceof String || typeof l === 'string') {
             return l;
         }
 
-        return this.getElement().offset().left;
+        if (l !== parseFloat(l) && !(l instanceof Number)) {
+            l = this.getElement().offset().left;
+        }
+
+        return l + 'px';
     };
 
     smartStickySettingsManager.prototype.getFixedWidth = function () {
@@ -268,7 +286,7 @@
     };
 
     smartStickyPositionYCoordManager.prototype.getFromBottom = function () {
-        return !this.isCalculatedFromTop() ? this._yCoordObj.bottom : 'auto';
+        return this.isCalculatedFromTop() ? 'auto' : this._yCoordObj.bottom;
     };
 
 
@@ -301,31 +319,54 @@
     smartStickyPositionManager.prototype.setOrigPosition = function () {
         this.getSettingsManager().getElement().removeClass($.fn.smartSticky.classes.active)
             .css({
-                left: this.getSettingsManager().getPlaceholder().offset().left,
-                width: this.getSettingsManager().getPlaceholder().outerWidth(),
-                bottom: 'auto'
+                left: 0,
+                width: '100%'
             });
 
         return this;
     };
 
     smartStickyPositionManager.prototype.recalculateOrigPosition = function () {
-        if (this.getSettingsManager().isContainerOverflowing()) {
-            this.getSettingsManager().getElement()
-                .css('top', this.getSettingsManager().getPlaceholder().offset().top + this.getSettingsManager().getContainer().offset().top - $.fn.smartSticky.windowScrollingManager.getCurrentScrollTop());
-        }
+        var self = this;
+        self.getSettingsManager().getElement()
+            .css('top', function () {
+                if (self.getSettingsManager().getContainer().hasClass($.fn.smartSticky.classes.parent)) {
+                     return self.getSettingsManager().getPlaceholder().offset().top -
+                         self.getSettingsManager().getContainer().offset().top +
+                         (self.getSettingsManager().isContainerOverflowing() ? self.getScrollingManager().getCurrentScrollTop() : 0);
+                }
 
-        this.getSettingsManager().getElement()
-            .css('top', this.getSettingsManager().getPlaceholder().offset().top - $.fn.smartSticky.windowScrollingManager.getCurrentScrollTop());
+                return self.getSettingsManager().getElement().parent().offset().top -
+                    self.getSettingsManager().getPlaceholder().offset().top;
+                
+            });
 
-        return this;
+        return self;
     };
 
     smartStickyPositionManager.prototype.recalculateFixedPosition = function () {
-        this.getSettingsManager().getElement().css({
-            top: this.getYCoordManager().getFromTop(),
-            bottom: this.getYCoordManager().getFromBottom()
-        });
+        var self = this;
+        self.getSettingsManager().getElement()
+            .css('top', function () {
+                return (self.getSettingsManager().isContainerOverflowing() ? 
+                            self.getSettingsManager().getContainer().hasClass($.fn.smartSticky.classes.parent) ?
+                                self.getScrollingManager().getCurrentScrollTop() :
+                                self.getSettingsManager().getContainer().offset().top -
+                                self.getSettingsManager().getElement().parent().offset().top
+                                :
+                                self.getScrollingManager().getCurrentScrollTop() -
+                                self.getSettingsManager().getElement().parent().offset().top
+                    )
+                    +
+                    (
+                        self.getYCoordManager().isCalculatedFromTop() ?
+                        self.getYCoordManager().getFromTop()
+                        :
+                        self.getScrollingManager().getOverflowingElement().outerHeight() -
+                        self.getYCoordManager().getFromBottom() -
+                        self.getSettingsManager().getElement().outerHeight()
+                    );
+            });
 
         return this;
     };
@@ -342,7 +383,7 @@
 
         return this.getOrigOffsetTop() -
             this.getScrollingManager().getOverflowingElement().outerHeight() +
-            (this.getSettingsManager().getOptions().show.immediately || this.getSettingsManager().isContainerOverflowing() ? this.getSettingsManager().getPlaceholder().outerHeight() : -1 * this.getSettingsManager().getOptions().show.delay) >
+            (this.getSettingsManager().getOptions().show.immediately ? this.getSettingsManager().getPlaceholder().outerHeight() : -1 * this.getSettingsManager().getOptions().show.delay) >
             this.getScrollingManager().getCurrentScrollTop();
     };
 
@@ -352,7 +393,7 @@
         }
 
         return this.getOrigOffsetTop() +
-            (this.getSettingsManager().getOptions().show.immediately || this.getSettingsManager().isContainerOverflowing() ? 0 : this.getSettingsManager().getPlaceholder().outerHeight() + this.getSettingsManager().getOptions().show.delay) <
+            (this.getSettingsManager().getOptions().show.immediately ? 0 : this.getSettingsManager().getPlaceholder().outerHeight() + this.getSettingsManager().getOptions().show.delay) <
             this.getScrollingManager().getCurrentScrollTop();
     };
 
@@ -403,13 +444,9 @@
     };
 
     smartStickyPositionManager.prototype.prepareFixedPosition = function () {
-        var p = 'toggle';
-
-        if (!this.getSettingsManager().isContainerOverflowing()) {
-            p = this.getSettingsManager().getOptions().show.fixed;
-            if (p instanceof Function) {
-                p = p(this.getSettingsManager(), this.getScrollingManager());
-            }
+        var p = this.getSettingsManager().getOptions().show.fixed;
+        if (p instanceof Function) {
+            p = p(this.getSettingsManager(), this.getScrollingManager());
         }
 
         this._fixedPosition = Object.keys($.fn.smartSticky.positions)[0];
@@ -523,38 +560,19 @@
         invisible: 'sticky-smart-invisible',
         active: 'sticky-smart-active',
         background: 'sticky-smart-background',
-        container: 'sticky-smart-container'
+        container: 'sticky-smart-container',
+        parent: 'sticky-smart-parent'
     };
 
     $.fn.smartSticky.positions = {
-        top: function (manager) {
-            if (manager.getSettingsManager().isContainerOverflowing()) {
-                return {
-                    top: manager.getSettingsManager().getContainer().offset().top - $.fn.smartSticky.windowScrollingManager.getCurrentScrollTop()
-                };
-            }
-
+        top: function () {
             return { top: 0 };
 
         },
-        bottom: function (manager) {
-            if (manager.getSettingsManager().isContainerOverflowing()) {
-                return {
-                    bottom: 
-                        $.fn.smartSticky.windowScrollingManager.getCurrentScrollTop() +
-                        $.fn.smartSticky.windowScrollingManager.getOverflowingElement().outerHeight() -
-                        manager.getSettingsManager().getContainer().offset().top -
-                        manager.getSettingsManager().getContainer().outerHeight()
-                };
-            }
-
+        bottom: function () {
             return { bottom: 0 };
         },
         toggle: function (manager) {
-            if (manager.getSettingsManager().isContainerOverflowing()) {
-                return manager.outOfOrigPositionAbove() ? 'bottom' : 'top';
-            }
-
             return manager.getScrollingManager().scrollingDown() ? 'top' : 'bottom';
         }
     };

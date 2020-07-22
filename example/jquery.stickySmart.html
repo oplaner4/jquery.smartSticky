@@ -15,7 +15,7 @@
 <body class="m-2">
     <div class="container">
         <h2 class="mb-3">Jquery.smartSticky examples</h2>
-        <div class="row">
+        <div class="row mb-2">
             <div class="col-md-6 col-lg-4">
                 <div>
                     <h5 class="sticky-smart-1">
@@ -53,7 +53,7 @@
                 </div>
             </div>
         </div>
-        <div class="row jumbotron">
+        <div class="row jumbotron mb-2">
             <div class="col-md-6 col-lg-4">
                 <div>
                     <h5 class="sticky-smart-4">
@@ -93,7 +93,7 @@
                 </div>
             </div>
         </div>
-        <div class="row">
+        <div class="row mb-2">
             <div class="col-md-6 col-lg-4">
                 <div class="overflow-auto" style="height:600px;">
                     <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Integer rutrum, orci vestibulum ullamcorper ultricies, lacus quam ultricies odio, vitae placerat pede sem sit amet enim. Duis condimentum augue id magna semper rutrum. Nullam sit amet magna in magna gravida vehicula. Etiam bibendum elit eget erat. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos hymenaeos. Donec quis nibh at felis congue commodo. Morbi leo mi, nonummy eget tristique non, rhoncus non leo. Nullam justo enim, consectetuer nec, ullamcorper ac, vestibulum in, elit. Integer rutrum, orci vestibulum ullamcorper ultricies, lacus quam ultricies odio, vitae placerat pede sem sit amet enim. Vestibulum fermentum tortor id mi. Praesent vitae arcu tempor neque lacinia pretium. Maecenas fermentum, sem in pharetra pellentesque, velit turpis volutpat ante, in pharetra metus odio a lectus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. In rutrum. Maecenas ipsum velit, consectetuer eu lobortis ut, dictum at dui. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Duis ante orci, molestie vitae vehicula venenatis, tincidunt ac pede. Praesent id justo in neque elementum ultrices.</p>
@@ -136,7 +136,7 @@
                 </div>
             </div>
         </div>
-        <div class="row jumbotron">
+        <div class="row jumbotron mb-2">
             <div class="col-md-6 col-lg-4">
                 <div>
                     <h5 class="sticky-smart-10">
@@ -177,8 +177,7 @@
                 </div>
             </div>
         </div>
-
-        <div class="row jumbotron">
+        <div class="row jumbotron mb-2">
             <div class="col-md-6 col-lg-4">
                 <div>
                     <h5 class="sticky-smart-13">
@@ -270,7 +269,7 @@
                 </table>
             </div>
         </div>
-        <div class="row">
+        <div class="row mb-2">
             <nav class="navbar navbar-expand-lg navbar-light bg-light navbar-sticky-smart">
                 <a class="navbar-brand" href="#">Navbar</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -361,7 +360,7 @@
                     fixed: 'toggle'
                 }
             });
-
+            
             $('.sticky-smart-4').smartSticky({
                 container: function (settingsManager) {
                     return settingsManager.getElement().closest('.row');
@@ -377,7 +376,7 @@
                     }
                 }
             });
-
+            
             $('.sticky-smart-5').smartSticky({
                 show: {
                     delay: 400
@@ -402,7 +401,7 @@
                 }
             });
             
-
+            
             $.fn.smartSticky.positions['customToggle'] = function (positionManager) {
                 if (positionManager.getScrollingManager().scrollingDown()) {
                     return { top: 100 };
@@ -417,7 +416,7 @@
                 }
             });
 
-
+            
             $('.sticky-smart-9').on('smartSticky.deactivate', function () {
                 $(this).css('color', 'black');
             }).smartSticky({
@@ -511,7 +510,8 @@
             $('.sticky-smart-14').smartSticky({
                 show: {
                     original: {
-                        above: true
+                        above: true,
+                        under: false
                     },
                     fixed: 'bottom',
                     immediately: true
@@ -523,7 +523,7 @@
                     immediately: true
                 }
             });
-
+            
         });
     </script>
 </body>
