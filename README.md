@@ -1,7 +1,7 @@
 # Jquery.smartSticky
 Free, easy to use, javascript library for toggling between original and fixed position, because of limited support of sticky position even in newer browsers.
 
-Current stable version: **2.6.0**
+Current stable version: **2.6.1**
 
 ### Features
 Jquery.smartSticky supports:
