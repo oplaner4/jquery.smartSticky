@@ -114,6 +114,7 @@ $.fn.smartSticky.positions['myAwesomePosition1'] = function (positionManager) {
     if (positionManager.getScrollingManager().scrollingDown()) {
     	 return { top: 10 };
     }
+    
     return { bottom: 10 };
 };
 
@@ -141,11 +142,11 @@ One of the accepted values of `show.fixed` option property.
 show: {
     fixed: function () {
          if ($(window).width() < 768) {
-	          /* on mobile phones */
+	      /* on mobile phones */
               return 'bottom';
          }
          
-	     return 'toggle';
+	 return 'toggle';
     }
 }
 ```
@@ -211,9 +212,9 @@ container: function (settingsManager) {
     	<div class="row">
     	    <div class="col-3">
     	         <div class="sticky-smart"></div>
-			</div>
+	    </div>
     	    <div class="col-9">
-		         ....
+		  ....
             </div>
     	</div>
     */
@@ -318,8 +319,8 @@ Updates dynamically options.
 $('#myElem').smartSticky('setOptions', {
     show: {
         scrolling: {
-	        up: true
-	    }
+	   up: true
+        }
     }
 });
 ```
