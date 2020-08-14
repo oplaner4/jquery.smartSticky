@@ -141,10 +141,11 @@ One of the accepted values of `show.fixed` option property.
 show: {
     fixed: function () {
          if ($(window).width() < 768) {
-	      /* on mobile phones */
+	          /* on mobile phones */
               return 'bottom';
          }
-	 return 'toggle';
+         
+	     return 'toggle';
     }
 }
 ```
@@ -181,6 +182,7 @@ show: {
 	    /* on mobile phones */
             return !scrollingManager.scrollingDown();
         }
+        
         return scrollingManager.scrollingDown();
     }
 }
@@ -211,7 +213,7 @@ container: function (settingsManager) {
     	         <div class="sticky-smart"></div>
 			</div>
     	    <div class="col-9">
-		 ....
+		         ....
             </div>
     	</div>
     */
@@ -245,22 +247,20 @@ If you want to change top or bottom property of the fixed element, define your o
 
 ```javascript
 css: {
-    fixed: {
-    	left: function (settingsManager) {
-    	    if ($(window).width() < 768) {
-		/* on mobile phones */
-    	        return 0;
-    	    }
-    	    return settingsManager.getElement().offset().left;
-    	},
-	width: function (settingsManager) {
-    	    if ($(window).width() < 768) {
-		/* on mobile phones */
-    	        return '100%';
-    	    }
-    	    return settingsManager.getElement().outerWidth();
-    	}
-    }
+     fixed: {
+        left: function () {
+            if ($(window).width() < 768) {
+             	 /* on mobile phones */
+                 return 0;
+            }
+        },
+        width: function () {
+            if ($(window).width() < 768) {
+                 /* on mobile phones */
+                 return $('body').outerWidth();
+            }
+        }
+     }
 }
 ```
 
@@ -317,9 +317,9 @@ Updates dynamically options.
 ```javascript
 $('#myElem').smartSticky('setOptions', {
     show: {
-    	scrolling: {
-	    up: true
-	}
+        scrolling: {
+	        up: true
+	    }
     }
 });
 ```
