@@ -1,5 +1,5 @@
 /**
-* jquery.smartSticky 2.6.0
+* jquery.smartSticky 2.6.1
 * https://github.com/oplaner4/jquery.smartSticky
 * by Ondrej Planer, oplaner4@gmail.com
 * 
@@ -152,7 +152,7 @@
             .addClass($.fn.smartSticky.classes.active)
             .trigger('smartSticky.activated', [this.getSettingsManager()]);
 
-        if (new Array('rgba(0, 0, 0, 0)', 'transparent').indexOf(this.getSettingsManager().getElement().css('background-color')) > -1) {
+        if ($.fn.smartSticky.constants.css.noBackground.indexOf(this.getSettingsManager().getElement().css('background-color')) > -1) {
             this.getSettingsManager().getElement().addClass($.fn.smartSticky.classes.background);
         }
 
@@ -218,7 +218,7 @@
         }
 
         this._container = c.addClass($.fn.smartSticky.classes.container);
-        this._isContainerOverflowing = new Array('auto', 'scroll', 'overlay').indexOf(this.getContainer().css('overflow')) > -1;
+        this._isContainerOverflowing = $.fn.smartSticky.constants.css.overflowing.indexOf(this.getContainer().css('overflow')) > -1;
         return this;
     };
 
@@ -562,6 +562,13 @@
         background: 'sticky-smart-background',
         container: 'sticky-smart-container',
         parent: 'sticky-smart-parent'
+    };
+    
+    $.fn.smartSticky.constants = {
+        css: {
+            noBackground: new Array('rgba(0, 0, 0, 0)', 'transparent'),
+            overflowing: new Array('auto', 'scroll', 'overlay')
+        }
     };
 
     $.fn.smartSticky.positions = {
