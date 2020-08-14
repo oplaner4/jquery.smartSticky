@@ -93,7 +93,7 @@ Determines if the element can be shown above its original position.
 
 #### show.original.under
 - Type: `Boolean`
-- Default: `false`
+- Default: `true`
 
 Determines if the element can be shown under its original position.
 
