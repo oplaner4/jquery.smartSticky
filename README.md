@@ -126,6 +126,11 @@ $.fn.smartSticky.positions['myAwesomePosition2'] = function () {
 	return 'toggle';
 };
 
+// change options
+show: {
+    fixed: 'myAwesomePosition1'
+}
+
 ```
 This callback can be used in two different ways: 
 - return `Object` with extra `'top'` or `'bottom'`.
