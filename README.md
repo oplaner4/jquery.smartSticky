@@ -1,7 +1,7 @@
 # Jquery.smartSticky
 Free, easy to use, javascript library for toggling between original and fixed position, because of limited support of sticky position even in newer browsers.
 
-Current stable version: **2.6.1**
+Current stable version: **2.6.2**
 
 ### Features
 Jquery.smartSticky supports:
@@ -9,7 +9,6 @@ Jquery.smartSticky supports:
 * Toggling between top and bottom position
 * Displaying of fixed element only inside of container area
 * Implementation of own callbacks and positions
-* Inner overflowing containers
 * Support of fixed header in tables
 
 ### Installation and dependencies
@@ -37,6 +36,7 @@ $('#myElem').smartSticky([options])
   - Type: `Object`
   - Default options to be changed, see the list of available options below.
   
+  
 #### 3. Initialization
 
 You can use the following code with default options.
@@ -47,8 +47,8 @@ You can use the following code with default options.
 $(function() {
     $('#myElem').smartSticky({
         show: {
-	    immediately: false,
-            delay: 50,   /* ignored when immediately set to true */
+            immediately: false,
+            delay: 50,  /* ignored when immediately set to true */
             original: {
                 under: true,
                 above: false
@@ -77,7 +77,7 @@ $(function() {
 - Type: `Number`
 - Default: `50`
 
-ScrollTop value that postpones activation of the fixed element and accelerates its hiding on return. Use `0` to deactivate.
+ScrollTop value that postpones showing of the fixed element and accelerates its hiding on return. Use `0` to deactivate.
 
 #### show.immediately
 - Type: `Boolean`
@@ -112,18 +112,18 @@ If you want to define your own placement position callback, extend default posit
 ```javascript
 $.fn.smartSticky.positions['myAwesomePosition1'] = function (positionManager) {
     if (positionManager.getScrollingManager().scrollingDown()) {
-    	 return { top: 10 };
+        return { top: 10 };
     }
-    
+
     return { bottom: 10 };
 };
 
 $.fn.smartSticky.positions['myAwesomePosition2'] = function () {
-	if ($(window).outerWidth() < 900) {
-	     return { bottom: 0 };
-	}
-	
-	return 'toggle';
+    if ($(window).outerWidth() < 900) {
+         return { bottom: 0 };
+    }
+
+    return 'toggle';
 };
 
 // change options
@@ -146,12 +146,12 @@ One of the accepted values of `show.fixed` option property.
 ```javascript
 show: {
     fixed: function () {
-         if ($(window).width() < 768) {
-	      /* on mobile phones */
-              return 'bottom';
-         }
-         
-	 return 'toggle';
+        if ($(window).width() < 768) {
+         /* on mobile phones */
+             return 'bottom';
+        }
+
+        return 'toggle';
     }
 }
 ```
@@ -185,10 +185,10 @@ If `show.fixed` is set to `'toggle'`, this callback should return `true` for pro
 show: {
     scrolling: function (settingsManager, scrollingManager) {
         if ($(window).width() < 768) {
-	    /* on mobile phones */
+        /* on mobile phones */
             return !scrollingManager.scrollingDown();
         }
-        
+
         return scrollingManager.scrollingDown();
     }
 }
@@ -214,14 +214,14 @@ If no element is included in `JQuery` collection or found by `String` selector, 
 ```javascript
 container: function (settingsManager) {
     /*
-    	<div class="row">
-    	    <div class="col-3">
-    	         <div class="sticky-smart"></div>
-	    </div>
-    	    <div class="col-9">
-		  ....
+        <div class="row">
+            <div class="col-3">
+                 <div class="sticky-smart"></div>
             </div>
-    	</div>
+            <div class="col-9">
+                 ....
+            </div>
+        </div>
     */
 
     return settingsManager.getElement().closest('.row');
@@ -253,20 +253,24 @@ If you want to change top or bottom property of the fixed element, define your o
 
 ```javascript
 css: {
-     fixed: {
-        left: function () {
+    fixed: {
+        left: function (settingsManager) {
             if ($(window).width() < 768) {
-             	 /* on mobile phones */
-                 return 0;
+               /* on mobile phones */
+                return 0;
             }
+
+            return settingsManager.getElement().offset().left;
         },
-        width: function () {
+    width: function (settingsManager) {
             if ($(window).width() < 768) {
-                 /* on mobile phones */
-                 return $('body').outerWidth();
+                /* on mobile phones */
+                return '100%';
             }
+
+            return settingsManager.getElement().outerWidth();
         }
-     }
+    }
 }
 ```
 
@@ -296,7 +300,7 @@ If you want to change default settings, use the following code:
 ```javascript
 $.extend( true, $.fn.smartSticky.defaults, {
     show: {
-    	delay: 0
+        delay: 0
     }
 } );
 ```
@@ -324,7 +328,7 @@ Updates dynamically options.
 $('#myElem').smartSticky('setOptions', {
     show: {
         scrolling: {
-	   up: true
+            up: true
         }
     }
 });
