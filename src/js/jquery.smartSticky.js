@@ -1,5 +1,5 @@
 /**
-* jquery.smartSticky 2.7.0
+* jquery.smartSticky 2.7.1
 * https://github.com/oplaner4/jquery.smartSticky
 * by Ondrej Planer, oplaner4@gmail.com
 * 
@@ -85,12 +85,8 @@
                 }
             }
         }
-        else {
-            if (this.activated()) {
-                this.deactivate();
-            }
-
-            this.getPositionManager().recalculateOrigPosition();
+        else if (this.activated()) {
+             this.deactivate();
         }
 
         return this;
@@ -307,20 +303,11 @@
     smartStickyPositionManager.prototype.setOrigPosition = function () {
         this.getSettingsManager().getElement().removeClass($.fn.smartSticky.classes.active)
             .css({
-                left: this.getSettingsManager().getPlaceholder().offset().left,
+                left: this.getSettingsManager().getPlaceholder().get(0).offsetLeft,
                 width: this.getSettingsManager().getPlaceholder().outerWidth(),
-                bottom: 'auto'
+                bottom: 'auto',
+                top: this.getSettingsManager().getPlaceholder().get(0).offsetTop
             });
-
-        return this;
-    };
-
-    smartStickyPositionManager.prototype.recalculateOrigPosition = function () {
-        this.getSettingsManager().getElement()
-            .css('top',
-                this.getSettingsManager().getPlaceholder().offset().top -
-                $.fn.smartSticky.windowScrollingManager.getCurrentScrollTop()
-            );
 
         return this;
     };

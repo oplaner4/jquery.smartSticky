@@ -1,5 +1,5 @@
 /**
-* jquery.smartSticky 2.7.0
+* jquery.smartSticky 2.7.1
 * https://github.com/oplaner4/jquery.smartSticky
 * by Ondrej Planer, oplaner4@gmail.com
 * 
@@ -14,7 +14,7 @@
 */
 
 .sticky-smart {
-    position: fixed;
+    position: absolute;
 }
 
 .sticky-smart-container {
@@ -30,6 +30,7 @@
         -o-transition: opacity .1s ease-in-out;
         transition: opacity .1s ease-in-out;
         margin: 0;
+        position: fixed;
     }
 
         .sticky-smart.sticky-smart-active.sticky-smart-invisible, .sticky-smart-placeholder {
