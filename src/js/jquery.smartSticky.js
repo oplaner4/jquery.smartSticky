@@ -1,5 +1,5 @@
 /**
-* jquery.smartSticky 2.6.2
+* jquery.smartSticky 2.7.0
 * https://github.com/oplaner4/jquery.smartSticky
 * by Ondrej Planer, oplaner4@gmail.com
 * 
@@ -8,9 +8,9 @@
 * jquery.smartSticky.js may be freely distributed under the MIT license.
 *
 * Copyright 2020, Ondrej Planer
- * 
- * 
- * PRESERVE THIS PLEASE
+* 
+* 
+* PRESERVE THIS PLEASE
 */
 
 (function (factory) {
@@ -126,7 +126,9 @@
         this.getSettingsManager().getElement()
             .trigger('smartSticky.deactivate', [this.getSettingsManager()]);
         this.getPositionManager().setOrigPosition();
-        this.getSettingsManager().getElement().trigger('smartSticky.deactivated', [this.getSettingsManager()]);
+        this.getSettingsManager().getElement().trigger('smartSticky.deactivated',
+            [this.getSettingsManager()]
+        );
         return this;
     };
 
@@ -153,13 +155,14 @@
     };
 
 
-
-
     var smartStickySettingsManager = function (options, elem) {
         this._options = null;
         this._container = null;
         this._elem = elem;
-        this._placeholder = elem.clone(false).addClass($.fn.smartSticky.classes.placeholder).removeAttr('id');
+        this._placeholder = elem.clone(false).addClass(
+            $.fn.smartSticky.classes.placeholder
+        ).removeAttr('id');
+
         $('label', this._placeholder)
             .removeAttr('for');
         $('input, select, textarea', this._placeholder)
@@ -175,7 +178,9 @@
     };
 
     smartStickySettingsManager.prototype.setOptions = function (options, update) {
-        this._options = $.extend(true, {}, update ? this._options : $.fn.smartSticky.defaults, options);
+        this._options = $.extend(
+            true, {}, update ? this._options : $.fn.smartSticky.defaults, options
+        );
         return this;
     };
 
@@ -549,7 +554,6 @@
     $.fn.smartSticky.positions = {
         top: function () {
             return { top: 0 };
-
         },
         bottom: function () {
             return { bottom: 0 };
